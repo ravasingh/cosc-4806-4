@@ -15,6 +15,8 @@ if (!isset($_SESSION['auth'])) {
         <meta name="mobile-web-app-capable" content="yes">
     </head>
     <body>
+      <h2>Welcome to the Home Page</h2>
+      <p>You are logged in!</p>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">COSC 4806</a>
@@ -28,6 +30,12 @@ if (!isset($_SESSION['auth'])) {
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/about">About Me</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/about">About Me</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/notes">Reminders</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
