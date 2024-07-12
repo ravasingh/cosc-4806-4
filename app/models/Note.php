@@ -1,42 +1,44 @@
 <?php
 
-    class Note {
-    private $db;
+class Note {
 
-    public function __construct() {
-        $this->db = db_connect();
-    }
-
-    public function create($user_id, $subject) {
-        $db = db_connect();
-        $statement = $db->prepare("INSERT INTO notes (user_id, subject) VALUES (:user_id, :subject)");
-        $statement->bindParam(':user_id', $user_id);
-        $statement->bindParam(':subject', $subject);
-        return $statement->execute();
-    }
-
-    public function get_notes($user_id) {
+    public function getAllNotes($user_id) {
         $db = db_connect();
         $statement = $db->prepare("SELECT * FROM notes WHERE user_id = :user_id AND deleted = 0");
-        $statement->bindParam(':user_id', $user_id);
+        $statement->bindValue(':user_id', $user_id);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function update($id, $subject, $completed) {
+    public function createNote($user_id, $subject) {
         $db = db_connect();
-        $statement = $db->prepare("UPDATE notes SET subject = :subject, completed = :completed WHERE id = :id");
-        $statement->bindParam(':subject', $subject);
-        $statement->bindParam(':completed', $completed);
-        $statement->bindParam(':id', $id);
-        return $statement->execute();
+        $statement = $db->prepare("INSERT INTO notes (user_id, subject, created_at) VALUES (:user_id, :subject, NOW())");
+        $statement->bindValue(':user_id', $user_id);
+        $statement->bindValue(':subject', $subject);
+        $statement->execute();
     }
 
-    public function delete($id) {
+    public function getNoteById($id) {
+        $db = db_connect();
+        $statement = $db->prepare("SELECT * FROM notes WHERE id = :id");
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateNote($id, $subject, $completed) {
+        $db = db_connect();
+        $statement = $db->prepare("UPDATE notes SET subject = :subject, completed = :completed WHERE id = :id");
+        $statement->bindValue(':id', $id);
+        $statement->bindValue(':subject', $subject);
+        $statement->bindValue(':completed', $completed);
+        $statement->execute();
+    }
+
+    public function deleteNote($id) {
         $db = db_connect();
         $statement = $db->prepare("UPDATE notes SET deleted = 1 WHERE id = :id");
-        $statement->bindParam(':id', $id);
-        return $statement->execute();
+        $statement->bindValue(':id', $id);
+        $statement->execute();
     }
 }
-?>
