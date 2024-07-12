@@ -25,7 +25,7 @@ class User {
             $_SESSION['auth'] = 1;
             $_SESSION['username'] = 'Admin';
             $_SESSION['isAdmin'] = true;  // Set admin session
-            header('Location: /reports/index');
+            header('Location: /reports');
             die;
         }
 
