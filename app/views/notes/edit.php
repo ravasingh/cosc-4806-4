@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Note</title>
-</head>
-<body>
-    <h1>Edit Note</h1>
-    <form action="/notes/edit/<?php echo $data['note']['id']; ?>" method="post">
-        <label for="subject">Subject:</label>
-        <input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($data['note']['subject']); ?>" required>
-        <label for="completed">Completed:</label>
-        <input type="checkbox" id="completed" name="completed" <?php echo $data['note']['completed'] ? 'checked' : ''; ?>>
-        <button type="submit">Update</button>
+<?php require_once 'app/views/templates/header.php' ?>
+<div class="container">
+    <h2>Edit Reminder</h2>
+    <form action="/note/update/<?= $data['note']['id'] ?>" method="post">
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" class="form-control" name="subject" value="<?= htmlspecialchars($data['note']['subject']) ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="completed">Completed</label>
+            <input type="checkbox" name="completed" <?= $data['note']['completed'] ? 'checked' : '' ?>>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Update</button>
     </form>
-</body>
-</html>
+</div>
+<?php require_once 'app/views/templates/footer.php' ?>
