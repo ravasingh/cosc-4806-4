@@ -23,7 +23,8 @@
                     <br>
                     <button type="submit" class="btn btn-primary">Create Account</button>
                 </fieldset>
-            </form> 
+            </form>
+            <p>Already have an account? <a href="/login">Login here</a></p>
         </div>
     </div>
 <?php require_once 'app/views/templates/footer.php' ?>
