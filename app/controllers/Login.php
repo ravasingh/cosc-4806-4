@@ -1,30 +1,23 @@
 <?php
 
 class Login extends Controller {
+
 		public function index() {
-				if (isset($_SESSION['auth']) && $_SESSION['auth'] == 1) {
-						header('Location: /home');
-						exit;
-				}
 				$this->view('login/index');
 		}
 
-		public function authenticate() {
-				$username = $_POST['username'];
-				$password = $_POST['password'];
+		public function verify() {
+				$username = $_REQUEST['username'];
+				$password = $_REQUEST['password'];
 
 				$user = $this->model('User');
-				$authResult = $user->authenticate($username, $password);
 
-				if ($authResult['status'] == 'success') {
-						$_SESSION['auth'] = 1;
-						$_SESSION['username'] = $username;
-						header('Location: /home');
-						exit;
-				} else {
-						$_SESSION['error'] = $authResult['message'];
+				if ($user->isLockedOut($username)) {
+						$_SESSION['lockoutMessage'] = "You have been locked out due to too many failed login attempts. Please try again after 60 seconds.";
 						header('Location: /login');
-						exit;
+						die;
 				}
+
+				$user->authenticate($username, $password);
 		}
 }
