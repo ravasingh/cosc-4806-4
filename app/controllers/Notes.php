@@ -1,53 +1,49 @@
 <?php
 
-
-class Notes extends Controller {
-    public function index() {
-        $note = $this->model('Note');
-        $user_id = $_SESSION['user_id']; 
-        $notes = $note->get_notes($user_id);
-        $this->view('notes/index', ['notes' => $notes]);
-    }
+class Note extends Controller {
 
     public function create() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $subject = $_POST['subject'];
-            $user_id = $_SESSION['user_id']; 
+        $this->view('notes/create');
+    }
 
-            $note = $this->model('Note');
-            if ($note->create($user_id, $subject)) {
-                header('Location: /notes');
-            } else {
-                echo "Error creating note.";
-            }
-        } else {
-            $this->view('notes/create');
-        }
+    public function store() {
+        $user_id = $_SESSION['user_id'];
+        $subject = $_POST['subject'];
+
+        $noteModel = $this->model('Note');
+        $noteModel->createNote($user_id, $subject);
+
+        header('Location: /home');
     }
 
     public function edit($id) {
-        $note = $this->model('Note');
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $subject = $_POST['subject'];
-            $completed = isset($_POST['completed']) ? 1 : 0;
-            if ($note->update($id, $subject, $completed)) {
-                header('Location: /notes');
-            } else {
-                echo "Error updating note.";
-            }
-        } else {
-            $note = $note->get_note_by_id($id);
-            $this->view('notes/edit', ['note' => $note]);
-        }
+        $noteModel = $this->model('Note');
+        $note = $noteModel->getNoteById($id);
+
+        $this->view('notes/edit', ['note' => $note]);
+    }
+
+    public function update($id) {
+        $subject = $_POST['subject'];
+        $completed = isset($_POST['completed']) ? 1 : 0;
+
+        $noteModel = $this->model('Note');
+        $noteModel->updateNote($id, $subject, $completed);
+
+        header('Location: /home');
     }
 
     public function delete($id) {
-        $note = $this->model('Note');
-        if ($note->delete($id)) {
-            header('Location: /notes');
-        } else {
-            echo "Error deleting note.";
-        }
+        $noteModel = $this->model('Note');
+        $noteModel->deleteNote($id);
+
+        header('Location: /home');
     }
+    public function getAllNotes() {
+        $db = db_connect();
+        $statement = $db->prepare("SELECT * FROM notes WHERE deleted = 0");
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
-?>
