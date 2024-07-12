@@ -1,19 +1,10 @@
 <?php
 
-class Create extends Controller {
+class Home extends Controller {
 
-    public function index() {		
-        $this->view('create/index');
-    }
-
-    public function register() {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        $user = $this->model('User');
-        $user->register($username, $password);
-
-        header('Location: /login');
-        die;
+    public function index() {
+        $noteModel = $this->model('Note');
+        $notes = $noteModel->getAllNotes($_SESSION['user_id']);
+        $this->view('home/index', ['notes' => $notes]);
     }
 }
