@@ -1,6 +1,6 @@
 <?php
 
-class reports extends Controller {
+class Reports extends Controller {
 
     public function index() {
         if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] !== true) {
